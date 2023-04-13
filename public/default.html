@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chat</title>
+  <title>MPU bus</title>
   <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
   <style>
@@ -13,7 +13,7 @@
       height: 80vh;
     }
 
-    .marker {
+    .student {
       position: absolute;
       /* background-image: url('mapbox-marker-icon-20px-yellow.png'); */
       background-image: url('mapbox-icon.png');
@@ -21,7 +21,16 @@
       width: 30px;
       height: 30px;
       top: -14px;
-      border-radius: 50%;
+      cursor: pointer;
+    }
+    .driver{
+      position: absolute;
+      background-image: url('bus-marker.png');
+      /* background-image: url('mapbox-icon.png'); */
+      background-size: cover;
+      width: 25px;
+      height: 35px;
+      top: -14px;
       cursor: pointer;
     }
   </style>

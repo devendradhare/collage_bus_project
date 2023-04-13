@@ -8,6 +8,7 @@ let user_count = 0;
 // difault position
 // let position = [77.39889912939028, 23.25604944351329];
 // chhindwara 78.8700483, 21.9521117
+// bhopal     77.3893970559734, 23.259434297853353
 let position = [78.8700483, 21.9521117];
 
 // setting up MapBoxe
@@ -15,7 +16,7 @@ var map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/streets-v11',
   center: [77.39889912939028, 23.25604944351329], // starting position
-  zoom: 4
+  zoom: 11
 });
 
 // getting currunt coordinates of the user
@@ -48,24 +49,26 @@ geolocate.on('geolocate', (e) => {
 });
 
 // program to generate random strings
+// let userid = Math.random().toString(36).substring(2,7);
+let user_name = getCookie().at(0);
+let userid = Math.random().toString(36).substring(2, 7);
 
-let userid = Math.random().toString(36).substring(2,7);
-console.log("this is randome string",userid);
+function getCookie() {
+  var a = document.cookie.split("dvn");
+  return a[1].split("split");
+}
+// console.log("this is randome string",userid);
 
-// let userid = "0";
 window.onload = function () {
-
-  // userid
-  // do {
-  //   userid = prompt("enter your name: ");
-  // } while (userid == undefined);
 
   // sending users location cordinates to the server in evry 5 sec.
   setInterval(() => {
-    console.log("sending msg: " + position + " from " + userid);
-    socket.emit('message', {
-      "msg": position,
-      "userid": userid
+    // console.log("sending coord: " + position + " from " + userid);
+    socket.emit('my_coords', {
+      "coord": position,
+      "userid": userid,
+      "user_name": user_name,
+      "i_am_a": getCookie().at(1)
     });
   }, 3000);
 
@@ -73,12 +76,12 @@ window.onload = function () {
   var markers = [];
 
   // receiving marker data form the server
-  socket.on('message', function (obj) {
-    console.log("obj = ", obj);
+  socket.on('mark_it_on_map', function (obj) {
+    // console.log("obj = ", obj);
 
     // removeing old and offline users marker
     markers.forEach(element => {
-      console.log("element removed", element);
+      // console.log("element removed", element);
       element.remove();
     });
 
@@ -91,10 +94,11 @@ window.onload = function () {
     obj.forEach(el => {
       geojson.features.push({
         'userid': el.userid,
+        'i_am_a': el.i_am_a,
         'type': 'Feature',
         'geometry': {
           'type': 'Point',
-          'coordinates': el.msg
+          'coordinates': el.coord
         },
       });
     });
@@ -102,7 +106,7 @@ window.onload = function () {
     // add markers to map
     for (const feature of geojson.features) {
       const el = document.createElement('div');
-      el.className = 'marker';
+      el.className = feature.i_am_a;
 
       // make a marker for each feature and add it to the map
       var temp = new mapboxgl.Marker(el)
@@ -161,7 +165,7 @@ window.onload = function () {
 //   let msg = position[0] + " " + position[1];
 //   msg = msg.replace(/(<([^>]+)>)/gi, "");
 //   const userid = localStorage.getItem("userid");
-//   console.log("sending msg: " + msg + " from " + userid);
+  // console.log("sending msg: " + msg + " from " + userid);
 //   socket.emit('message', { "msg": msg, "userid": userid, "room": room });
 //   $("#msg").val("hi");
 // });

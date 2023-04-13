@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPU bus</title>
+    <style>
+        .user_form {
+            background: lemonchiffon;
+            height: 100vh;
+            /* background: lightblue; */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form_div {
+            z-index: 1;
+            width: 255px;
+        }
+
+        #my_form {
+            background: dimgray;
+            color: aliceblue;
+            height: 110px;
+            border-radius: 5px;
+            padding: 15px;
+            
+        }
+
+        #my_form input {
+            display: block;
+            border-radius: 4px;
+            padding: auto;
+            margin: 10px 0 15px 0;
+            width: 97%;
+            height: 25px;
+        }
+
+        .submit_button input {
+            position: fixed;
+            opacity: 0;
+            pointer-events: none;
+        }
+        #pass_popup {
+            background: dimgray;
+            position: relative;
+            bottom: 120px;
+            /* z-index: 4; */
+            height: 70px;
+            width: 225px;
+            padding: 15px;
+            transition: .3s;
+            border-radius: 4px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="user_form">
+        <div class="form_div">
+            <form id="my_form" action="/" method="post">
+                <div>
+                    Enter your name :
+                </div>
+                <input type="text" name="user" required>
+                <button class="submit_button" type="submit" name="student"><input type="radio" id="student"
+                        name="join_as_" value="student" checked>
+                    <label for="student"> i am a student</label></button>
+                <button class="submit_button" type="submit" name="driver"> <input type="radio" id="driver"
+                        name="join_as_" value="driver"> <label for="driver"> i am a bus driver</label></button>
+            </form>
+        </div>
+        <div id="pass_popup">
+            <form id="password">
+                <div>
+                    Enter your password:
+                </div>
+                <input type="password" name="driver_password" required>
+                <button class="submit_pass" type="submit" name="driver_pass">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        var form = document.getElementById("my_form");
+        var pass = document.getElementById("password");
+        var pass_popup = document.getElementById("pass_popup");
+        let password = "";
+        let sub_btn;
+        // pass_popup.style.display = "none";
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();                     // prevent the form from submitting normally
+            var formData = new FormData(form);          // create a new FormData object
+            var user = formData.get("user");            // get the value of the "user" field
+            var joinAs = formData.get("join_as_");      // get the value of the "join_as_" field
+            // console.log(user, joinAs);               // log the values to the console
+            if (joinAs == "driver") {
+                pass_popup.style.bottom = "4px";
+                sub_btn = this;
+            }
+            else {
+                this.submit();
+            }
+            document.cookie = "advn"+ user + "split" + joinAs+"dvnb";
+        });
+        pass.addEventListener("submit", function (pass_event) {
+            pass_event.preventDefault();
+            var inp_pass = new FormData(pass);
+            password = inp_pass.get("driver_password");
+            if (password == "dvn") {
+                sub_btn.submit();
+            }
+            else {
+                alert("wrong password");
+            }
+        })
+    </script>
+
+</body>
+
+</html>
