@@ -15,7 +15,6 @@
 
     .student {
       position: absolute;
-      /* background-image: url('mapbox-marker-icon-20px-yellow.png'); */
       background-image: url('mapbox-icon.png');
       background-size: cover;
       width: 30px;
@@ -23,7 +22,8 @@
       top: -14px;
       cursor: pointer;
     }
-    .driver{
+
+    .driver {
       position: absolute;
       background-image: url('bus-marker.png');
       /* background-image: url('mapbox-icon.png'); */
@@ -37,7 +37,6 @@
 </head>
 
 <body>
-
   <header>
     <button>
       Students
@@ -45,110 +44,16 @@
     </button>
   </header>
 
-  <!-- Map will be show here  -->
+  <!-- Map will be show here -->
   <div id="map"></div>
+
+  <video width="0" height="0" autoplay loop muted playsinline>
+    <source src="vscode_1sec.mp4" type="video/mp4" />
+  </video>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="/default.js"></script>
+  <script src="/bus_route.js"></script>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!doctype html>
-  <html class="h-100">
-    
-    <head>
-      <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chat</title>
-  <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
-  <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
-  <style>
-    #map {
-      width: 100vw;
-      height: 80vh;
-    }
-    
-    .marker {
-      position: absolute;
-      background-image: url('mapbox-icon.png');
-      background-size: cover;
-      width: 30px;
-      height: 30px;
-      top: -14px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-  </style>
-</head>
-
-<body class="d-flex flex-column h-100">
-
-  <header>
-  -->
-<!-- Fixed navbar -->
-<!--
-    <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
-      <div class="container-md">
-        <a class="navbar-brand" href="#">EasyChat</a>
-        <div class="ms-auto">
-          <button type="button" class="btn btn-primary position-relative">
-            Chatters
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-              id="participants">
-              0
-            </span>
-          </button>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <div id="map"></div>
-
-  <main class="flex-shrink-0 mt-5">
-
-    <div class="container-md text-center mt-3">
-      <div id="chatBoard" class="p-3"></div>
-    </div>
-  </main>
-
-  <footer class="footer mt-auto py-0 bg-light">
-    <div class="container">
-      <form action="" name="f1" id="f1">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="input-group mt-3 mb-3">
-              <input type="text" class="form-control" placeholder="your message..." aria-label="your message..."
-                aria-describedby="basic-addon2" id="msg" required>
-              <div class="input-group-append">
-                <button id="sendMsg" class="btn btn-primary">Send</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </footer>
-
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="lib/jquery-1.11.1.js"></script>
-  <script src="/default.js"></script>
-</body>
-
-</html> -->

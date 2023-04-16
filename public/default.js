@@ -1,100 +1,56 @@
 // MapBox api key
-mapboxgl.accessToken = 'pk.eyJ1IjoiY29kZW5kcmFtIiwiYSI6ImNsZzRneHZpMDBwNjUzZXN0MzNjdzc1cTcifQ.bv5VgjZ12reLoeK9w-teYg';
+mapboxgl.accessToken =
+  'pk.eyJ1IjoiY29kZW5kcmFtIiwiYSI6ImNsZzRneHZpMDBwNjUzZXN0MzNjdzc1cTcifQ.bv5VgjZ12reLoeK9w-teYg';
 
-// setup my socket client
-var socket = io();
-let user_count = 0;
+var socket = io();                                        // setup my socket client
+let user_count = 0;                                       // connected users
+let position = [78.8700483, 21.9521117];                  // default coordinates (chhindwara)
 
-// difault position
-// let position = [77.39889912939028, 23.25604944351329];
-// chhindwara 78.8700483, 21.9521117
-// bhopal     77.3893970559734, 23.259434297853353
-let position = [78.8700483, 21.9521117];
+let userid = Math.random().toString(36).substring(2, 7);  // program to generate random strings
+let cookie_data = document.cookie.split("dvn")[1].split("split");
 
-// setting up MapBoxe
-var map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/streets-v11',
-  center: [77.39889912939028, 23.25604944351329], // starting position
-  zoom: 11
-});
+var map = new mapboxgl.Map({                              // setting up MapBoxe
+  container: 'map', style: 'mapbox://styles/mapbox/streets-v11',
+  center: [77.39889912939028, 23.25604944351329],         // it will sets the camera of the map above bhopal
+  zoom: 11, // minZoom: 10
+}); 00
 
-// getting currunt coordinates of the user
-var geolocate = new mapboxgl.GeolocateControl({
-  positionOptions: {
-    enableHighAccuracy: true
-  },
-  // When active the map will receive updates to the device's location as it changes.
+var geolocate = new mapboxgl.GeolocateControl({           // getting currunt coordinates of the user
+  positionOptions: { enableHighAccuracy: true },
   trackUserLocation: false,
-  // Draw an arrow next to the location dot to indicate which direction the device is heading.
   showUserHeading: true
 });
 
-// the button on the map to showing our current position
-map.addControl(geolocate);
+map.addControl(geolocate);              // the button on the map to showing our current position
 map.on('load', function (e) {
-  setInterval(() => {
-    geolocate.trigger();
-  }, 3000);
+  setInterval(() => { geolocate.trigger(); }, 3000);
 });
 
 geolocate.on('geolocate', (e) => {
-  map.flyTo({
-    zoom: map.getZoom()
-  });
-  var lon = e.coords.longitude;
-  var lat = e.coords.latitude
-  position = [lon, lat];
-  // console.log(position);
+  map.flyTo({ zoom: map.getZoom() });
+  position = [e.coords.longitude, e.coords.latitude];
 });
 
-// program to generate random strings
-// let userid = Math.random().toString(36).substring(2,7);
-let user_name = getCookie().at(0);
-let userid = Math.random().toString(36).substring(2, 7);
-
-function getCookie() {
-  var a = document.cookie.split("dvn");
-  return a[1].split("split");
-}
-// console.log("this is randome string",userid);
 
 window.onload = function () {
-
-  // sending users location cordinates to the server in evry 5 sec.
-  setInterval(() => {
-    // console.log("sending coord: " + position + " from " + userid);
-    socket.emit('my_coords', {
-      "coord": position,
-      "userid": userid,
-      "user_name": user_name,
-      "i_am_a": getCookie().at(1)
+  setInterval(() => {                                 // sending users location coordinates 
+    socket.emit('my_coords', {                        // to the server in evry 3 sec.
+      "coord": position, "userid": userid,
+      "user_name": cookie_data.at(0),
+      "i_am_a": cookie_data.at(1)
     });
   }, 3000);
 
-  // adding marker of the users location
-  var markers = [];
-
-  // receiving marker data form the server
-  socket.on('mark_it_on_map', function (obj) {
-    // console.log("obj = ", obj);
-
-    // removeing old and offline users marker
-    markers.forEach(element => {
-      // console.log("element removed", element);
-      element.remove();
-    });
-
-    // telling to the map, where to add markers
-    let geojson = {
+  var markers = [];                                   // adding marker of the users location
+  socket.on('mark_it_on_map', function (obj) {        // receiving marker data form the server
+    markers.forEach(element => { element.remove(); });// removeing old and offline users marker
+    let geojson = {                                   // telling to the map, where to add markers
       'type': 'FeatureCollection',
       'features': [],
     };
-    // process of adding marker
-    obj.forEach(el => {
+    obj.forEach(el => {                               // process of adding marker
       geojson.features.push({
-        'userid': el.userid,
-        'i_am_a': el.i_am_a,
+        'userid': el.userid, 'i_am_a': el.i_am_a,
         'type': 'Feature',
         'geometry': {
           'type': 'Point',
@@ -103,113 +59,17 @@ window.onload = function () {
       });
     });
 
-    // add markers to map
-    for (const feature of geojson.features) {
+    for (const feature of geojson.features) {         // adding each users markers on the map
       const el = document.createElement('div');
-      el.className = feature.i_am_a;
-
-      // make a marker for each feature and add it to the map
-      var temp = new mapboxgl.Marker(el)
-        .setLngLat(feature.geometry.coordinates)
-        .addTo(map);
-      // temp.remove();
-      // console.log("=======temp=======", temp);
+      el.className = feature.i_am_a;                  // make a marker for each feature and 
+      var temp = new mapboxgl.Marker(el)              // add it to the map
+        .setLngLat(feature.geometry.coordinates).addTo(map);
       markers.push(temp);
     }
   });
 
-  socket.on('participants', function (count) {
-    let p = document.getElementById("participants");
-    p.innerHTML = " " + count;
+  socket.on('participants', function (count) {        // updating conncted users count
+    user_count = count;
+    document.getElementById("participants").innerHTML = " " + count;
   });
 }
-
-
-
-// ==============================================
-// ================ GARBAGE CODE ================
-// ==============================================
-
-// read room in querystring
-// const queryString = window.location.search;
-// const urlParams = new URLSearchParams(queryString);
-// const room = urlParams.get('room');
-//
-//
-
-// const generateRandomString = (length = 6) => Math.random().toString(20).substr(2, length);
-
-// const generateRandomDarkColor = () => {
-//   var color = '#';
-//   for (var i = 0; i < 6; i++) {
-//       color += Math.floor(Math.random() * 10);
-//   }
-//   return color;
-// }
-// socket.emit('room', room);
-//
-//   // let userid = "";
-// localStorage.setItem("userid", userid);
-// if (localStorage.getItem("userid")) {
-  //   userid = localStorage.getItem("userid");
-// } else {
-  //   userid = generateRandomString(8);
-//   localStorage.setItem("userid", userid);
-//   // localStorage.setItem("userColor",generateRandomDarkColor());
-// }
-//
-//
-// $("form").on('submit', function (event) {
-//   event.preventDefault();
-//   // let msg = $("#msg").val();
-//   let msg = position[0] + " " + position[1];
-//   msg = msg.replace(/(<([^>]+)>)/gi, "");
-//   const userid = localStorage.getItem("userid");
-  // console.log("sending msg: " + msg + " from " + userid);
-//   socket.emit('message', { "msg": msg, "userid": userid, "room": room });
-//   $("#msg").val("hi");
-// });
-// $("form").on('submit', function (event) {
-  //   event.preventDefault();
-  // let msg = $("#msg").val();
-  // let msg = position;
-  // msg = msg.replace(/(<([^>]+)>)/gi, "");
-  // const userid = localStorage.getItem("userid");
-// console.log("adding marker", i++);
-// console.log("feature.userid = ");
-// console.log(feature);
-// create a HTML element for each feature
-//
-//
-
-
-// let geojson = {
-//   'type': 'FeatureCollection',
-//   'features': [],
-//   // 'features': [
-//   //   {
-//   //     'userid': userid,
-//   //     'type': 'Feature',
-//   //     'geometry': {
-//   //       'type': 'Point',
-//   //       'coordinates': position
-//   //     },
-//   //   }
-//   // ]
-// };
-//
-//
-//
-// geojson.features = [];
-// let prevChat = $("#chatBoard").html();
-// const ts = new Date().toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-// $("#chatBoard").html(prevChat + 'userid = ' + obj.userid + " message = " + obj.msg + ' time = ' + ts + '</br>');
-// var chatboard = document.getElementById("chatBoard");
-// chatboard.scrollTop = chatboard.scrollHeight;
-// console.log(prevChat + obj.userid + ": " + obj.msg);
-//
-//
-//
-  // window.addEventListener('beforeunload', function (e) {
-  //   socket.emit('disconnect', '=======');
-  // });
