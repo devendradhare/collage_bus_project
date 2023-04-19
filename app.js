@@ -45,6 +45,7 @@ io.on('connection', function (socket) {
                 set_intr = true;
                 console.log(" stoped : " + si);
             }
+            count = io.engine.clientsCount;
             console.log("message sended " + count + " started : " + si);
             io.emit('mark_it_on_map', students); // to all, including the sender
         }, 2000);
