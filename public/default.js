@@ -23,7 +23,7 @@ var geolocate = new mapboxgl.GeolocateControl({           // getting currunt coo
 
 map.addControl(geolocate);              // the button on the map to showing our current position
 map.on('load', function (e) {
-  setInterval(() => { geolocate.trigger(); }, 3000);
+  setInterval(() => { geolocate.trigger(); }, 900);
 });
 
 geolocate.on('geolocate', (e) => {
@@ -39,7 +39,7 @@ window.onload = function () {
       "user_name": cookie_data.at(0),
       "i_am_a": cookie_data.at(1)
     });
-  }, 3000);
+  }, 2000);
 
   var markers = [];                                   // adding marker of the users location
   socket.on('mark_it_on_map', function (obj) {        // receiving marker data form the server

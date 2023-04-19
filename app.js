@@ -11,13 +11,13 @@ var port = process.env.PORT || 3000;
 var io = require('socket.io')(http);
 let count = 0;
 let students = [];
+let set_intr = true;
 
 function uniqu_students(obj) {
     console.log(obj);
     for (var i = 0; i < students.length; i++) {
         if (students[i].userid == obj.userid) {
             students[i].coord = obj.coord;
-            io.emit('mark_it_on_map', students); // to all, including the sender
 
             // write it in a file 
             // const d = new Date();
@@ -37,12 +37,22 @@ io.on('connection', function (socket) {
     count = io.engine.clientsCount;
     console.log("Connected clients: " + count);
     io.emit('participants', count);
+    if (set_intr) {
+        set_intr = false;
+        let si = setInterval(() => {
+            if (!count) {
+                clearInterval(si);
+                set_intr = true;
+                console.log(" stoped : " + si);
+            }
+            console.log("message sended " + count + " started : " + si);
+            io.emit('mark_it_on_map', students); // to all, including the sender
+        }, 2000);
+    }
 
-    // Called when the client calls socket.emit('my_coords')
-    socket.on('my_coords', function (obj) { uniqu_students(obj); });
+    socket.on('my_coords', function (obj) { uniqu_students(obj); });// Called when the client calls socket.emit('my_coords')
 
-    // Called when a client disconnects
-    socket.on('disconnect', function () {
+    socket.on('disconnect', function () {       // Called when a client disconnects
         count = io.engine.clientsCount;
         console.log('Disconnection \nConnected clients: ' + count);
         io.emit('participants', count);
