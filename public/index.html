@@ -11,6 +11,7 @@
             margin: 0;
             /* padding: 0; */
         }
+
         .user_form {
             background: rgb(6, 17, 95);
             height: 80vh;
@@ -92,11 +93,14 @@
             <form id="my_form" action="/" method="post">
                 <div> Enter your name : </div>
                 <input type="text" name="user" required>
-                <button class="submit_button" type="submit" name="student"><input type="radio" id="student"
-                        name="join_as_" value="student" checked>
-                    <label for="student"> i am a student</label></button>
-                <button class="submit_button" type="submit" name="driver"> <input type="radio" id="driver"
-                        name="join_as_" value="driver"> <label for="driver"> i am a bus driver</label></button>
+                <button class="submit_button" type="submit" name="student">
+                    <input type="radio" id="student" name="join_as_" value="student" checked>
+                    <label for="student"> i am a student</label>
+                </button>
+                <button class="submit_button" type="submit" name="driver">
+                    <input type="radio" id="driver" name="join_as_" value="driver">
+                    <label for="driver"> i am a bus driver</label>
+                </button>
             </form>
         </div>
         <div id="pass_popup">
@@ -137,7 +141,6 @@
                 alert("wrong password");
         })
     </script>
-
 </body>
 
 </html>
