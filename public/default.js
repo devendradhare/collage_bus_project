@@ -1,6 +1,6 @@
 // MapBox api key
 mapboxgl.accessToken =
-  'pk.eyJ1IjoiY29kZW5kcmFtIiwiYSI6ImNsZzRneHZpMDBwNjUzZXN0MzNjdzc1cTcifQ.bv5VgjZ12reLoeK9w-teYg';
+  'pk.eyJ1IjoiY29kZW5kcmFtIiwiYSI6ImNsaGhwZGpuYTAwOGQzZ3BoMms3YnRmZ20ifQ.cVGdebs10gxgZzcs1ECI_Q';
 
 var socket = io();                                        // setup my socket client
 let user_count = 0;                                       // connected users
@@ -13,7 +13,7 @@ var map = new mapboxgl.Map({                              // setting up MapBoxe
   container: 'map', style: 'mapbox://styles/mapbox/streets-v11',
   center: [77.39889912939028, 23.25604944351329],         // it will sets the camera of the map above bhopal
   zoom: 11, // minZoom: 10
-}); 00
+});
 
 var geolocate = new mapboxgl.GeolocateControl({           // getting currunt coordinates of the user
   positionOptions: { enableHighAccuracy: true },
