@@ -19,11 +19,6 @@ function uniqu_students(obj) {
         if (students[i].userid == obj.userid) {
             students[i].coord = obj.coord;
 
-            // write it in a file 
-            // const d = new Date();
-            // fs.appendFile(`user_data\\${obj.user_name + "_" + obj.userid}.txt`,
-            //     "coord [" + obj.coord + "], userid: " + obj.userid + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "\n",
-            //     (err) => { if (err) throw err; });
             return;
         }
     }
