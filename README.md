@@ -1,9 +1,10 @@
-# collage_bus_project
+# [collage_bus_project](https://mpu-bus.onrender.com/)
 # College Bus Tracking Web App
 
 This is the readme file for the College Bus Tracking Web App, a sophisticated application designed to provide real-time tracking of college buses and students' locations. This app allows users to easily monitor the current location of their college bus and track the whereabouts of individual students.
 
-## How to Use the App
+[project is online click here to visit](https://mpu-bus.onrender.com/)
+## How to Use the app
 
 To use the app, please follow these steps:
 
